@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 import asyncio
 import functools
 import http
@@ -6,7 +7,7 @@ import os
 import subprocess
 
 import websockets
-
+import sys
 
 def check(rm_hostname):
     try:
@@ -121,4 +122,9 @@ def run(rm_host="130.238.91.87", host="localhost", port=6789):
 
 
 if __name__ == "__main__":
-    run()
+    print ('Number of arguments', len(sys.argv))
+    print ('Argument list: ', str(sys.argv))
+    if len(sys.argv) == 2:
+        run(rm_host=sys.argv[1])
+    else:
+        run()
