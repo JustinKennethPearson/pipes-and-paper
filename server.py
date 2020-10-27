@@ -16,6 +16,7 @@ def check(rm_hostname):
                 "-o",
                 "ConnectTimeout=2",
                 rm_hostname,
+                "-lroot",
                 "cat",
                 "/proc/device-tree/model",
             ],
@@ -37,7 +38,7 @@ async def websocket_handler(websocket, path, rm_host, rm_model):
         raise NotImplementedError(f"Unsupported reMarkable Device : {rm_model}")
 
     # The async subprocess library only accepts a string command, not a list.
-    command = f"ssh -o ConnectTimeout=2 {rm_host} cat {device}"
+    command = f"ssh -o ConnectTimeout=2 {rm_host} -lroot cat {device}"
 
     x = 0
     y = 0
@@ -104,7 +105,7 @@ async def http_handler(path, request):
     return (http.HTTPStatus.OK, headers, body)
 
 
-def run(rm_host="remarkable", host="localhost", port=6789):
+def run(rm_host="130.238.91.87", host="localhost", port=6789):
     rm_model = check(rm_host)
     bound_handler = functools.partial(
         websocket_handler, rm_host=rm_host, rm_model=rm_model
